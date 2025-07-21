@@ -1,0 +1,194 @@
+:host {
+  display: block;
+  background: linear-gradient(to right, #5c1a6a, #37003c);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #ffffff;
+  min-height: 100vh;
+  padding: 20px;
+}
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  text-align: center;
+}
+
+.search-input {
+  margin: 20px 0;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: none;
+  width: 300px;
+  font-size: 16px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+}
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  text-align: center;
+}
+
+#datatable_standings {
+  width: 90%; /* <-- Hace que la tabla ocupe más espacio horizontal */
+  max-width: 1200px; /* <-- Limita el ancho para que no se estire demasiado */
+  margin-top: 20px;
+  background-color: #808080;
+  color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+#datatable_standings th,
+#datatable_standings td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 12px;
+  font-size: 14px;
+}
+
+.pagination-controls button {
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.pagination-controls span {
+  font-size: 16px;
+}
+/* Centrado general */
+.centered {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+/* Estilo del input de búsqueda personalizado */
+.search-input {
+  max-width: 400px;
+  margin: 0 auto 30px auto;
+  padding: 10px 15px;
+  border: 2px solid #f6f0fc;
+  border-radius: 10px;
+  font-size: 16px;
+  color: #37003c;
+  background-color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  display: block;
+}
+
+/* Tabla estilizada con colores Premier */
+table.table {
+  background-color: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  color: #37003c;
+}
+
+/* Cabecera en púrpura Premier */
+table thead {
+  background-color: #37003c;
+  color: #ffffff;
+}
+
+table thead th {
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 12px;
+}
+
+/* Cuerpo de la tabla con efecto hover */
+table tbody td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 10px;
+}
+
+table tbody tr:hover {
+  background-color: #f6f0fc;
+  transition: background-color 0.3s ease;
+}
+
+/* Logo del equipo */
+td img {
+  border-radius: 6px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+/* Responsive en pantallas pequeñas */
+@media (max-width: 768px) {
+  table th,
+  table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+}
+
+.premier-logo {
+  width: 120px;
+  height: auto;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
+  transition: transform 0.3s ease;
+}
+
+.premier-logo:hover {
+  transform: scale(1.05);
+}
+
+.header {
+  background-color: #5b00a6;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.header h1 {
+  margin: 0;
+  margin-left: 10px;
+  color: black;
+}
+
+.header img {
+  width: 150px;
+  height: auto;
+  margin-right: 10px;
+}
+
+.main-container {
+  background-color: black;
+  padding: 20px;
+}
+
+#datatable_standings {
+  background-color: #808080;
+  color: white;
+}
+
+#datatable_standings th,
+#datatable_standings td {
+  text-align: center;
+  vertical-align: middle;
+  color: white;
+}
+
+.team-name {
+  display: flex;
+  align-items: center;
+}
+
+.team-name img {
+  width: 30px;
+  height: auto;
+  vertical-align: middle;
+  margin-right: 10px;
+}
