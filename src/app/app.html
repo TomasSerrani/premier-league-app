@@ -1,1 +1,28 @@
-<app-standings></app-standings>
+<div class="main-content">
+  <div class="header d-flex justify-content-between align-items-center w-100 mb-4">
+    <div class="d-flex align-items-center">
+      <img
+        src="https://upload.wikimedia.org/wikipedia/en/f/f2/Premier_League_Logo.svg"
+        alt="Premier League Logo"
+        class="premier-logo"
+      />
+    </div>
+
+    <div class="auth-buttons">
+      <button 
+        class="btn btn-outline-light me-2 custom-btn"
+        routerLink="/register"
+      >
+        Registrarse
+      </button>
+      <button 
+        class="btn btn-light custom-btn-dark"
+        routerLink="/login"
+      >
+        Iniciar sesión
+      </button>
+    </div>
+  </div>
+
+  <router-outlet></router-outlet>
+</div>

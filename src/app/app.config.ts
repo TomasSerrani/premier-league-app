@@ -1,13 +1,13 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
-import { routes } from './app.routes'; // si tenés rutas
+import { routes } from './app.routes';
 import { FormsModule } from '@angular/forms';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withFetch()), // ✅ ESTO es lo que te está faltando
+    provideHttpClient(withFetch()),
     importProvidersFrom(FormsModule),
-    provideRouter(routes) // si estás usando rutas
+    provideRouter(routes)
   ]
 };
