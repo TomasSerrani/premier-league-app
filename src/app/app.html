@@ -1,28 +1,43 @@
-<div class="main-content">
-  <div class="header d-flex justify-content-between align-items-center w-100 mb-4">
-    <div class="d-flex align-items-center">
-      <img
-        src="https://upload.wikimedia.org/wikipedia/en/f/f2/Premier_League_Logo.svg"
-        alt="Premier League Logo"
-        class="premier-logo"
-      />
-    </div>
+<div class="header d-flex justify-content-between align-items-center px-4 py-3">
+  <!-- Logo -->
+  <div class="d-flex align-items-center">
+    <img
+      src="https://upload.wikimedia.org/wikipedia/en/f/f2/Premier_League_Logo.svg"
+      alt="Premier League Logo"
+      class="premier-logo"
+    />
+  </div>
 
-    <div class="auth-buttons">
+  <!-- Botones -->
+  <div class="auth-buttons d-flex align-items-center">
+    <button 
+      class="btn btn-outline-light me-2 custom-btn"
+      routerLink="/register"
+    >
+      Registrarse
+    </button>
+
+    <ng-container *ngIf="authService.currentUser$ | async as user; else notLoggedIn">
       <button 
-        class="btn btn-outline-light me-2 custom-btn"
-        routerLink="/register"
+        class="btn btn-light custom-btn-dark"
+        (click)="logout()"
       >
-        Registrarse
+        Cerrar sesión
       </button>
+    </ng-container>
+
+    <ng-template #notLoggedIn>
       <button 
         class="btn btn-light custom-btn-dark"
         routerLink="/login"
       >
         Iniciar sesión
       </button>
-    </div>
+    </ng-template>
   </div>
+</div>
 
+<!-- Contenido principal (tabla, etc.) -->
+<div class="main-content px-4">
   <router-outlet></router-outlet>
 </div>

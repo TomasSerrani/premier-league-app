@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -16,8 +17,15 @@ export class RegisterComponent {
     password: ''
   };
 
+  constructor(private authService: AuthService) {}
+
   register() {
-    console.log('Usuario registrado:', this.user);
-    alert(`¡Bienvenido, ${this.user.name}!`);
+    this.authService.register(this.user.email, this.user.password)
+      .then(() => {
+        alert(`¡Bienvenido, ${this.user.name}!`);
+      })
+      .catch(error => {
+        alert(`Error al registrar: ${error.message}`);
+      });
   }
 }
