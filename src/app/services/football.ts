@@ -16,4 +16,8 @@ export class FootballService {
   getStandings(): Observable<any> {
     return this.http.get(this.apiUrl, { headers: this.headers });
   }
+  getUltimosPartidos(equipoId: number): Observable<any> {
+  const url = `https://v3.football.api-sports.io/fixtures?team=${equipoId}&last=3`;
+  return this.http.get(url, { headers: this.headers });
+}
 }

@@ -20,24 +20,33 @@
         <th class="centered">GC</th>
         <th class="centered">DG</th>
         <th class="centered">Pts</th>
+        <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let team of paginatedTeams; let i = index">
-        <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
-        <td class="team-name">
-          <img [src]="team.team.logo" />
-          {{ team.team.name }}
-        </td>
-        <td>{{ team.all.played }}</td>
-        <td>{{ team.all.win }}</td>
-        <td>{{ team.all.draw }}</td>
-        <td>{{ team.all.lose }}</td>
-        <td>{{ team.all.goals.for }}</td>
-        <td>{{ team.all.goals.against }}</td>
-        <td>{{ team.all.goals.for - team.all.goals.against }}</td>
-        <td>{{ team.points }}</td>
-      </tr>
+  <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
+  <td class="team-name">
+    <img [src]="team.team.logo" />
+    {{ team.team.name }}
+  </td>
+  <td>{{ team.all.played }}</td>
+  <td>{{ team.all.win }}</td>
+  <td>{{ team.all.draw }}</td>
+  <td>{{ team.all.lose }}</td>
+  <td>{{ team.all.goals.for }}</td>
+  <td>{{ team.all.goals.against }}</td>
+  <td>{{ team.all.goals.for - team.all.goals.against }}</td>
+  <td>{{ team.points }}</td>
+  <td>
+  <button 
+  class="fav-btn" 
+  [class.added]="isFavorito(team.team.id)" 
+  (click)="toggleFavorito(team)">
+  ★
+</button>
+  </td>
+</tr>
     </tbody>
   </table>
   <div class="pagination-controls mt-4 d-flex justify-content-center">

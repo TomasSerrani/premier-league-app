@@ -1,17 +1,26 @@
-import { Injectable } from '@angular/core';
-import { Auth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User } from '@angular/fire/auth';
+import { Injectable, inject } from '@angular/core';
+import {
+  Auth,
+  onAuthStateChanged,           // 👈 de @angular/fire/auth
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  User
+} from '@angular/fire/auth';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private auth = inject(Auth);
+
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private auth: Auth) {
-     onAuthStateChanged(this.auth, (user) => {
-    console.log('Cambio de estado en Firebase:', user); // 👈 DEBE MOSTRAR EL USER
-    this.currentUserSubject.next(user);
-  });
+  constructor() {
+    onAuthStateChanged(this.auth, (user) => {
+      console.log('Cambio de estado en Firebase:', user);
+      this.currentUserSubject.next(user ?? null);
+    });
   }
 
   register(email: string, password: string) {
