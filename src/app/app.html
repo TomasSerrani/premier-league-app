@@ -1,14 +1,16 @@
 <div class="header d-flex justify-content-between align-items-center px-4 py-3">
-  <!-- Logo -->
+
   <div class="d-flex align-items-center">
-    <img
-      src="https://upload.wikimedia.org/wikipedia/en/f/f2/Premier_League_Logo.svg"
-      alt="Premier League Logo"
-      class="premier-logo"
-    />
+    <a routerLink="/">
+  <img
+    src="https://upload.wikimedia.org/wikipedia/en/f/f2/Premier_League_Logo.svg"
+    alt="Premier League Logo"
+    class="premier-logo"
+  />
+</a>
   </div>
 
-  <!-- Botones -->
+
   <div class="auth-buttons d-flex align-items-center">
     <button 
       class="btn btn-outline-light me-2 custom-btn"
@@ -44,7 +46,7 @@
   </div>
 </div>
 
-<!-- Contenido principal (tabla, etc.) -->
+
 <div class="main-content px-4">
   <router-outlet></router-outlet>
 </div>

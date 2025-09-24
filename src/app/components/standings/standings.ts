@@ -52,7 +52,7 @@ ngOnInit(): void {
   agregarAFavoritos(team: any) {
     this.favoritosService.agregarFavorito(team)
       .then(() => {
-        this.favoritos.push(team); // lo guardamos también en memoria
+        this.favoritos.push(team); 
         alert(`${team.team.name} agregado a favoritos`);
       })
       .catch(err => alert('Error al agregar favorito: ' + err));

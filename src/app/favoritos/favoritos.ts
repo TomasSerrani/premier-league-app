@@ -45,7 +45,7 @@ export class FavoritosComponent implements OnInit {
         this.updatePagination();
 
         if (this.favoritos.length > 0) {
-          // Hacemos todas las peticiones a la API en paralelo
+     
           const requests = this.favoritos.map(fav =>
             this.footballService.getUltimosPartidos(fav.equipoId)
           );

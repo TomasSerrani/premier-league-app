@@ -20,9 +20,9 @@ login() {
   console.log(`Login con ${this.email}`);
   this.authService.login(this.email, this.password)
     .then((result) => {
-      console.log('Usuario logueado:', result.user); // 👈 VERIFICAR ESTO
+      console.log('Usuario logueado:', result.user); 
       alert('Login exitoso');
-      this.router.navigate(['/']); // redirige al inicio
+      this.router.navigate(['/']); 
     })
     .catch(error => {
       alert(`Error al iniciar sesión: ${error.message}`);

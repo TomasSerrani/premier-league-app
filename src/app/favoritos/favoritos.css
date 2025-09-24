@@ -134,20 +134,20 @@ table tbody tr:hover {
 }
 
 .badge-win {
-  background-color: #28a745; /* verde */
+  background-color: #28a745; 
 }
 
 .badge-loss {
-  background-color: #dc3545; /* rojo */
+  background-color: #dc3545; 
 }
 
 .badge-draw {
-  background-color: #6c757d; /* gris */
+  background-color: #6c757d; 
 }
 .btn-eliminar {
-  background: linear-gradient(135deg, #e63946, #d62839); /* degradado rojo elegante */
+  background: linear-gradient(135deg, #e63946, #d62839); 
   border: none;
-  border-radius: 50px; /* pill shape */
+  border-radius: 50px; 
   padding: 6px 14px;
   font-size: 13px;
   font-weight: 600;

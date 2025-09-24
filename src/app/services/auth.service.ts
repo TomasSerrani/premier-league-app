@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import {
   Auth,
-  onAuthStateChanged,           // 👈 de @angular/fire/auth
+  onAuthStateChanged,         
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
