@@ -1,0 +1,89 @@
+:host {
+  display: block;
+  background: linear-gradient(to right, #5c1a6a, #37003c);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #ffffff;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+@media (max-width: 768px) {
+  table th,
+  table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+}
+
+.premier-logo {
+  width: 120px;
+  height: auto;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
+  transition: transform 0.3s ease;
+}
+
+.premier-logo:hover {
+  transform: scale(1.05);
+}
+
+.header img {
+  width: 150px;
+  height: auto;
+  margin-right: 10px;
+}
+
+.main-container {
+  background-color: black;
+  padding: 20px;
+}
+
+.header {
+  width: 100%;
+  background: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  align-items: center;
+  flex-direction: row;
+}
+
+.header h1 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 24px;
+}
+
+.auth-buttons .custom-btn {
+  padding: 10px 20px;
+  font-weight: bold;
+  border: 2px solid white;
+  border-radius: 10px;
+  background-color: transparent;
+  color: white;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+}
+
+.auth-buttons .custom-btn:hover {
+  background-color: #f6f0fc;
+  color: #37003c;
+}
+
+.auth-buttons .custom-btn-dark {
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 10px;
+  background-color: white;
+  color: #37003c;
+  transition: all 0.3s ease;
+}
+
+.auth-buttons .custom-btn-dark:hover {
+  background-color: #37003c;
+  color: white;
+}
