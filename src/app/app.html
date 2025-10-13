@@ -21,6 +21,12 @@
     
 
     <ng-container *ngIf="authService.currentUser$ | async as user; else notLoggedIn">
+      <button 
+    class="btn btn-light me-2 custom-btn-dark"
+    routerLink="/profile"
+  >
+    Perfil
+  </button>
        <button 
     class="btn btn-light me-2 custom-btn-dark"
     routerLink="/favoritos"
