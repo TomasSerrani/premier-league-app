@@ -1,0 +1,52 @@
+<div *ngIf="loading" class="loading">Cargando tus partidos guardados...</div>
+
+<div *ngIf="!loading && partidos.length === 0" class="no-data">
+  <p>No tienes partidos guardados aún.</p>
+</div>
+
+<div *ngIf="!loading && partidos.length > 0" class="partidos-grid">
+  <div class="partido-card" *ngFor="let p of partidos">
+    <div class="equipos">
+      <div class="equipo">
+        <img [src]="p.logoLocal" alt="logo local" class="logo" />
+        <span>{{ p.equipoLocal }}</span>
+      </div>
+
+      <div class="resultado">
+        <span>{{ p.golesLocal }} - {{ p.golesVisitante }}</span>
+      </div>
+
+      <div class="equipo">
+        <span>{{ p.equipoVisitante }}</span>
+        <img [src]="p.logoVisitante" alt="logo visitante" class="logo" />
+      </div>
+    </div>
+
+    <p class="fecha">
+      📅 {{ p.fecha | date:'longDate' }} — {{ p.fecha | date:'shortTime' }}
+    </p>
+    <p class="estadio">🏟️ {{ p.estadio }}</p>
+
+    <!-- Modo edición -->
+    <div *ngIf="editandoId === p.id" class="edicion">
+      <textarea [(ngModel)]="notaTemporal" placeholder="Escribe tu nota..." rows="3"></textarea>
+      <label>
+        Puntaje:
+        <input type="number" min="1" max="10" [(ngModel)]="puntajeTemporal" />
+      </label>
+      <div class="acciones">
+        <button class="btn btn-success" (click)="guardarCambios(p.id)">💾 Guardar</button>
+        <button class="btn btn-secondary" (click)="cancelarEdicion()">❌ Cancelar</button>
+      </div>
+    </div>
+
+    <div *ngIf="editandoId !== p.id" class="info-extra">
+      <p *ngIf="p.nota"><strong>📝 Nota:</strong> {{ p.nota }}</p>
+      <p *ngIf="p.puntaje"><strong>⭐ Puntaje:</strong> {{ p.puntaje }}/10</p>
+      <div class="acciones">
+        <button class="btn btn-primary" (click)="editar(p)">✏️ Editar</button>
+        <button class="btn btn-danger" (click)="eliminar(p.id)">🗑️ Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>

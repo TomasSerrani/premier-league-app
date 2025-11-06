@@ -21,9 +21,6 @@ export class RegisterComponent {
 
   register() {
     this.authService.register(this.user.email, this.user.password)
-      .then(() => {
-        alert(`¡Bienvenido, ${this.user.name}!`);
-      })
       .catch(error => {
         alert(`Error al registrar: ${error.message}`);
       });

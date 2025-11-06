@@ -1,0 +1,67 @@
+.partidos-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.partido-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 1.5rem;
+  width: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.partido-card:hover {
+  transform: translateY(-5px);
+}
+
+.equipos {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.resultado {
+  font-size: 1.5rem;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+}
+
+.fecha, .estadio {
+  color: #ddd;
+  margin: 0.5rem 0;
+}
+
+textarea {
+  width: 100%;
+  border-radius: 10px;
+  padding: 0.5rem;
+  resize: none;
+}
+
+.edicion input[type="number"] {
+  width: 60px;
+  text-align: center;
+  border-radius: 5px;
+  margin-left: 5px;
+}
+
+.acciones {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}

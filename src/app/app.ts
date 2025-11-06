@@ -19,8 +19,6 @@ export class App {
   }
 
   logout() {
-    this.authService.logout().then(() => {
-      alert('Sesión cerrada');
-    });
+    this.authService.logout();
   }
 }

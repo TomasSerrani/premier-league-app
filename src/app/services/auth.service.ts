@@ -36,7 +36,6 @@ export class AuthService {
     if (!this.auth.currentUser) return;
     await updateProfile(this.auth.currentUser, { displayName: name });
 
-    // también en Firestore
     const ref = doc(this.firestore, `users/${this.auth.currentUser.uid}`);
     await updateDoc(ref, { name });
   }

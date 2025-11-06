@@ -43,6 +43,9 @@
   </ng-template>
 </td>
         <td>
+          <button [routerLink]="['/partido', equipo.equipoId]" class="btn-ver">
+  Ver último partido
+</button>
           <button class="btn-eliminar" (click)="eliminarFavorito(equipo.id)">
   <i class="fas fa-trash-alt"></i> Eliminar
 </button>
@@ -51,7 +54,6 @@
     </tbody>
   </table>
 
-  <!-- Paginación -->
   <div class="pagination-controls mt-4 d-flex justify-content-center">
     <button
       class="btn btn-light mx-1"

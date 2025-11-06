@@ -1,0 +1,49 @@
+<div *ngIf="loading" class="loading">
+  <div class="spinner"></div>
+  <p>Cargando datos del partido...</p>
+</div>
+
+<div *ngIf="!loading && matchData" class="match-container">
+  <div class="header">
+    <h2>
+      <img [src]="matchData.teams.home.logo" class="team-logo" />
+      {{ matchData.teams.home.name }}
+      <span class="vs">VS</span>
+      {{ matchData.teams.away.name }}
+      <img [src]="matchData.teams.away.logo" class="team-logo" />
+    </h2>
+    <p class="match-info">
+      📅 {{ matchData.fixture.date | date:'fullDate' }} -
+      {{ matchData.fixture.date | date:'shortTime' }}
+      <br />
+      🏟️ {{ matchData.fixture.venue.name }}
+    </p>
+  </div>
+
+  <div class="score">
+    <span class="home">{{ matchData.goals.home }}</span>
+    <span class="dash">-</span>
+    <span class="away">{{ matchData.goals.away }}</span>
+  </div>
+
+  <h3 class="stats-title">Estadísticas del Partido</h3>
+
+  <div *ngIf="stats" class="stats-grid">
+    <div *ngFor="let s of stats" class="team-stats">
+      <h4 class="team-name">{{ s.team.name }}</h4>
+      <ul>
+        <li *ngFor="let stat of s.statistics">
+          <span class="stat-type">{{ translations[stat.type] || stat.type }}</span>
+          <span class="stat-value">{{ stat.value || 0 }}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<button class="btn btn-primary" (click)="guardarEstePartido()">
+  💾 Guardar este partido
+</button>
+
+<div *ngIf="!loading && !matchData" class="no-data">
+  <p>No se encontró información del último partido.</p>
+</div>

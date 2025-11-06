@@ -1,15 +1,16 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FavoritosService } from '../services/favoritos.service';
 import { FootballService } from '../services/football';
 import { AuthService } from '../services/auth.service';
-import { switchMap, of, forkJoin } from 'rxjs';
+import { of, switchMap, forkJoin } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-favoritos',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './favoritos.html',
   styleUrls: ['./favoritos.css']
 })
@@ -17,53 +18,66 @@ export class FavoritosComponent implements OnInit {
   favoritos: any[] = [];
   filteredFavoritos: any[] = [];
   paginatedFavoritos: any[] = [];
-
-  searchTerm: string = '';
-  currentPage: number = 1;
-  itemsPerPage: number = 10;
-  totalPages: number = 1;
+  searchTerm = '';
+  currentPage = 1;
+  itemsPerPage = 10;
+  totalPages = 1;
 
   constructor(
     private favoritosService: FavoritosService,
     private footballService: FootballService,
     private authService: AuthService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private zone: NgZone
   ) {}
 
   ngOnInit(): void {
-    this.authService.currentUser$.pipe(
-      switchMap(user => {
-        if (!user) return of([]);
-        console.log('UID del usuario logueado:', user.uid);
-        return this.favoritosService.getFavoritosDelUsuario(user.uid);
-      })
-    ).subscribe({
-      next: (data) => {
-        console.log('Favoritos recibidos:', data);
-        this.favoritos = data;
-        this.filteredFavoritos = [...this.favoritos];
-        this.updatePagination();
-
-        if (this.favoritos.length > 0) {
-     
-          const requests = this.favoritos.map(fav =>
-            this.footballService.getUltimosPartidos(fav.equipoId)
-          );
-
-          forkJoin(requests).subscribe((responses: any[]) => {
-            this.favoritos = this.favoritos.map((f, i) => ({
-              ...f,
-              ultimosPartidos: responses[i].response
-            }));
-            this.filteredFavoritos = [...this.favoritos];
+    this.authService.currentUser$
+      .pipe(
+        switchMap(user => {
+          if (!user) return of([]);
+          return this.favoritosService.getFavoritosDelUsuario(user.uid);
+        })
+      )
+      .subscribe({
+        next: (favoritos) => {
+          this.zone.run(() => {
+            this.favoritos = favoritos;
+            this.filteredFavoritos = [...favoritos];
             this.updatePagination();
-            this.cdr.detectChanges();
+            this.cargarUltimosPartidos();
           });
-        }
+        },
+        error: (err) => console.error('Error al leer favoritos:', err)
+      });
+  }
+
+  cargarUltimosPartidos() {
+    if (!this.favoritos.length) return;
+    const requests = this.favoritos.map(fav =>
+      this.footballService.getUltimosPartidos(fav.equipoId)
+    );
+
+    forkJoin(requests).subscribe({
+      next: (responses: any[]) => {
+        this.favoritos = this.favoritos.map((f, i) => {
+          const resp = responses[i];
+          const partidos = resp?.response || [];
+          const ultimos = partidos
+            .sort((a: any, b: any) =>
+              new Date(b.fixture.date).getTime() - new Date(a.fixture.date).getTime()
+            )
+            .slice(0, 3);
+          return { ...f, ultimosPartidos: ultimos };
+        });
+
+        this.zone.run(() => {
+          this.filteredFavoritos = [...this.favoritos];
+          this.updatePagination();
+          this.cdr.detectChanges();
+        });
       },
-      error: (err) => {
-        console.error('Error al leer favoritos:', err);
-      }
+      error: (err) => console.error('Error cargando partidos:', err)
     });
   }
 
@@ -71,7 +85,6 @@ export class FavoritosComponent implements OnInit {
     const esLocal = partido.teams.home.id === equipoId;
     const golesFavor = esLocal ? partido.goals.home : partido.goals.away;
     const golesContra = esLocal ? partido.goals.away : partido.goals.home;
-
     if (golesFavor > golesContra) return 'W';
     if (golesFavor < golesContra) return 'L';
     return 'D';
@@ -100,8 +113,11 @@ export class FavoritosComponent implements OnInit {
 
   eliminarFavorito(id: string) {
     this.favoritosService.eliminarFavorito(id).then(() => {
-      this.favoritos = this.favoritos.filter(f => f.id !== id);
-      this.filterFavoritos();
+      this.zone.run(() => {
+        this.favoritos = this.favoritos.filter(f => f.id !== id);
+        this.filterFavoritos();
+        this.cdr.detectChanges();
+      });
     });
   }
 }

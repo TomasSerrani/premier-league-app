@@ -11,4 +11,19 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'favoritos', component: FavoritosComponent },
   { path: 'profile', component: ProfileComponent },
+  {
+    path: 'partido/:teamId',
+    loadComponent: () =>
+      import('./components/partido-detalle/partido-detalle').then(
+        (m) => m.PartidoDetalleComponent
+      ),
+      
+  },
+  {
+    path: 'partidos-guardados',
+    loadComponent: () =>
+      import('./components/partidos-guardados/partidos-guardados')
+        .then(m => m.PartidosGuardadosComponent)
+  },
+  { path: '**', redirectTo: '' },
 ];

@@ -1,12 +1,12 @@
 export const environment = {
   production: false,
   firebaseConfig: {
-    apiKey: "AIzaSyDfJU-BJcMU-hkxN7sDzdTPdOOtAiM4AcE",
-    authDomain: "premierleague-42b27.firebaseapp.com",
-    projectId: "premierleague-42b27",
-    storageBucket: "premierleague-42b27.appspot.com",
-    messagingSenderId: "803820556264",
-    appId: "1:803820556264:web:ea64ac6993381003fc1e5d",
-    measurementId: "G-8E1BG4MQK8"
+  apiKey: "AIzaSyDLWl9Mvqe-KR2Y5SbnNoupD_0A-eyjFwc",
+  authDomain: "final-programacion-26a53.firebaseapp.com",
+  projectId: "final-programacion-26a53",
+  storageBucket: "final-programacion-26a53.firebasestorage.app",
+  messagingSenderId: "811885591063",
+  appId: "1:811885591063:web:48efb132370f838128ba52",
+  measurementId: "G-RX0WVRV3CZ"
   }
 };

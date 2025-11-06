@@ -134,3 +134,14 @@ table tbody tr:hover {
   color: gold; 
   text-shadow: 0px 0px 6px rgba(255, 215, 0, 0, 0.8);
 }
+.btn-ver {
+  background-color: #37003c;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+}
+.btn-ver:hover {
+  background-color: #5a0070;
+}

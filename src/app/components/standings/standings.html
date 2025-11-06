@@ -45,6 +45,9 @@
   (click)="toggleFavorito(team)">
   ★
 </button>
+<button [routerLink]="['/partido', team.team.id]" class="btn-ver">
+  Ver último partido
+</button>
   </td>
 </tr>
     </tbody>

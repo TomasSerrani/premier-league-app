@@ -1,0 +1,141 @@
+.match-container {
+  background: linear-gradient(180deg, #37003c, #5a0072);
+  color: white;
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+}
+
+.header h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.team-logo {
+  width: 40px;
+  height: 40px;
+}
+
+.vs {
+  background-color: #ff006e;
+  padding: 0.4rem 0.7rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  color: white;
+}
+
+.match-info {
+  font-size: 1rem;
+  opacity: 0.85;
+  margin-bottom: 1.5rem;
+}
+
+.score {
+  font-size: 3rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.score span {
+  background: #fff;
+  color: #37003c;
+  padding: 0.5rem 1.5rem;
+  border-radius: 1rem;
+  min-width: 60px;
+}
+
+.dash {
+  background: none;
+  color: white;
+}
+
+.stats-title {
+  margin-top: 2rem;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  color: #ffce00;
+  letter-spacing: 1px;
+}
+
+.stats-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  gap: 1.5rem;
+}
+
+.team-stats {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  width: 40%;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.team-name {
+  color: #ffce00;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-type {
+  color: #fff;
+  font-weight: 500;
+}
+
+.stat-value {
+  color: #ffd700;
+  font-weight: 600;
+}
+
+
+.loading {
+  text-align: center;
+  color: #fff;
+  padding-top: 4rem;
+}
+
+.spinner {
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top: 4px solid #ffce00;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 1rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.no-data {
+  color: white;
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+}

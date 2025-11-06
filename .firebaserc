@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "premierleague-42b27"
-  }
+    "default": "premierleague-42b27",
+    "final-programacion": "final-programacion-26a53"
+  },
+  "targets": {},
+  "etags": {}
 }
