@@ -145,3 +145,12 @@ table tbody tr:hover {
 .btn-ver:hover {
   background-color: #5a0070;
 }
+.table-hover tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important; 
+    color: #ffffff !important; 
+}
+.table-hover tbody tr:hover td,
+.table-hover tbody tr:hover th {
+    background-color: transparent !important;
+    color: #ffffff !important;
+}

@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PartidosGuardados } from './partidos-guardados';
+import { PartidosGuardadosComponent } from './partidos-guardados';
 
 describe('PartidosGuardados', () => {
-  let component: PartidosGuardados;
-  let fixture: ComponentFixture<PartidosGuardados>;
-
+  let component: PartidosGuardadosComponent;
+  let fixture: ComponentFixture<PartidosGuardadosComponent>;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PartidosGuardados]
+      imports: [PartidosGuardadosComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PartidosGuardados);
+    fixture = TestBed.createComponent(PartidosGuardadosComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,40 +1,45 @@
-import { Injectable, inject, NgZone } from '@angular/core';
-import { Firestore, collection, addDoc, deleteDoc, doc, query, where, getDocs, collectionData } from '@angular/fire/firestore';
+import { Injectable, inject } from '@angular/core';
+import { Firestore, collection, addDoc, doc, deleteDoc, collectionData, query, where } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class FavoritosService {
   private firestore = inject(Firestore);
   private auth = inject(Auth);
-  private zone = inject(NgZone);
 
-  async agregarFavorito(team: any) {
-    const uid = this.auth.currentUser?.uid;
-    if (!uid) throw new Error('Usuario no autenticado');
+  // 1. AGREGAR FAVORITO
+  async agregarFavorito(favorito: any) {
+    const user = this.auth.currentUser;
+    // Validación de seguridad
+    if (!user) throw new Error('Debes iniciar sesión para agregar favoritos.');
 
-    const favRef = collection(this.firestore, `users/${uid}/favoritos`);
-    const q = query(favRef, where('equipoId', '==', String(team.team.id)));
-    const snapshot = await getDocs(q);
-    if (!snapshot.empty) return;
-
-    await addDoc(favRef, {
-      equipoId: String(team.team.id),
-      nombreEquipo: team.team.name,
-      logoEquipo: team.team.logo,
-      createdAt: new Date()
+    // Creamos la referencia a la colección 'favoritos'
+    const ref = collection(this.firestore, 'favoritos');
+    
+    // Guardamos el documento con el UID del usuario
+    return addDoc(ref, {
+      uid: user.uid,
+      ...favorito
     });
   }
 
-  eliminarFavorito(id: string) {
-    const uid = this.auth.currentUser?.uid;
-    if (!uid) throw new Error('Usuario no autenticado');
-    const favDoc = doc(this.firestore, `users/${uid}/favoritos/${id}`);
-    return deleteDoc(favDoc);
+  // 2. OBTENER FAVORITOS (Del usuario actual)
+  getFavoritosDelUsuario(uid: string): Observable<any[]> {
+    const ref = collection(this.firestore, 'favoritos');
+    // Filtramos solo los que pertenezcan a este usuario
+    const q = query(ref, where('uid', '==', uid));
+    
+    // 'idField' agrega automáticamente el ID del documento de Firebase al objeto
+    return collectionData(q, { idField: 'id' }) as Observable<any[]>;
   }
 
-  getFavoritosDelUsuario(uid: string): Observable<any[]> {
-    const favRef = collection(this.firestore, `users/${uid}/favoritos`);
-    return collectionData(favRef, { idField: 'id' });
+  // 3. ELIMINAR FAVORITO
+  eliminarFavorito(id: string) {
+    // Referencia al documento específico por su ID
+    const ref = doc(this.firestore, `favoritos/${id}`);
+    return deleteDoc(ref);
   }
 }
