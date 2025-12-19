@@ -20,9 +20,13 @@ export class RegisterComponent {
   constructor(private authService: AuthService) {}
 
   register() {
-    this.authService.register(this.user.email, this.user.password)
-      .catch(error => {
-        alert(`Error al registrar: ${error.message}`);
-      });
-  }
+  this.authService
+    .register(this.user.email, this.user.password, this.user.name)
+    .then(() => {
+      alert('✅ Usuario registrado correctamente');
+    })
+    .catch(error => {
+      alert(`❌ Error al registrar: ${error.message}`);
+    });
+}
 }

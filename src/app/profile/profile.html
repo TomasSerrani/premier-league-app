@@ -1,14 +1,24 @@
 <div class="profile-container">
   <h2>Mi perfil</h2>
+  <div *ngIf="mensajeExito" class="success-message">
+  {{ mensajeExito }}
+</div>
   <div class="profile-avatar">
   <img [src]="auth.currentUser?.photoURL || 'https://via.placeholder.com/120'" alt="Foto de perfil" />
 </div>
-  <div *ngIf="!auth.currentUser?.emailVerified" class="alert alert-warning text-dark">
+  <div
+  *ngIf="mostrarAvisoVerificacion"
+  class="alert alert-warning text-dark"
+>
   ⚠️ Tu correo no está verificado.
-  <button (click)="enviarVerificacion()" class="btn btn-sm btn-outline-dark ms-2">
+  <button
+    (click)="enviarVerificacion()"
+    class="btn btn-sm btn-outline-dark ms-2"
+  >
     Enviar verificación
   </button>
 </div>
+
   <form (ngSubmit)="guardarCambios()" #form="ngForm" class="profile-form">
     <div class="form-group">
       <label for="name">Nombre:</label>
@@ -21,15 +31,37 @@
     </div>
 
     <div class="form-group">
-      <label for="password">Contraseña:</label>
-      <input type="password" id="password" [(ngModel)]="password" name="password" />
-    </div>
+  <label for="password">Contraseña:</label>
 
-    <div class="form-group">
-  <label for="photoFile">Foto de perfil:</label>
-  <input type="file" id="photoFile" (change)="onFileSelected($event)" />
+  <div style="display: flex; gap: 8px; align-items: center;">
+    <input
+      [type]="verPassword ? 'text' : 'password'"
+      id="password"
+      [(ngModel)]="password"
+      name="password"
+      placeholder="Nueva contraseña"
+    />
+
+    <button
+      type="button"
+      class="btn btn-sm btn-outline-secondary"
+      (click)="verPassword = !verPassword"
+    >
+      {{ verPassword ? 'Ocultar' : 'Mostrar' }}
+    </button>
+  </div>
 </div>
-  <div class="profile-actions">
+  
+<div class="profile-actions">
+    <label class="btn-save btn-change-photo">
+  Cambiar foto
+   <input
+     type="file"
+     accept="image/*"
+     hidden
+     (change)="onFileSelected($event)"
+    />
+  </label>
     <button type="submit" class="btn-save">Guardar cambios</button>
     <button type="button" class="btn-delete" (click)="deleteAccount()">Eliminar cuenta</button>
   </div>

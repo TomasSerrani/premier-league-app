@@ -27,6 +27,19 @@ export class ProfileComponent implements OnInit {
   email = '';
   password = '';
   photoURL = '';
+  mostrarAvisoVerificacion = false;
+  verPassword = false;
+  isAuthChecked = false;
+  mensajeExito = '';
+  
+  mostrarMensajeExito(texto: string) {
+  this.mensajeExito = texto;
+
+  setTimeout(() => {
+    this.mensajeExito = '';
+  }, 3000);
+}
+
 
   constructor(
     private authService: AuthService,
@@ -37,43 +50,40 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const user = this.auth.currentUser;
+  this.authService.currentUser$.subscribe(user => {
+
+    this.isAuthChecked = true;
 
     if (!user) {
-      alert('Debes iniciar sesión para acceder al perfil.');
-      this.router.navigate(['/login']);
+      this.router.navigate(['/']);
       return;
     }
 
     this.name = user.displayName || '';
     this.email = user.email || '';
     this.photoURL = user.photoURL || '';
-
-    if (!user.emailVerified) {
-      const confirmar = confirm(
-        'Tu correo aún no está verificado. ¿Deseas enviar el correo de verificación ahora?'
-      );
-      if (confirmar) {
-        this.enviarVerificacion();
-      }
-    }
-  }
+    this.mostrarAvisoVerificacion = !user.emailVerified;
+  });
+}
 
   async enviarVerificacion() {
-    const user = this.auth.currentUser;
-    if (!user) {
-      alert('No hay un usuario autenticado.');
-      return;
-    }
-
-    try {
-      await sendEmailVerification(user);
-      alert('✅ Se envió un correo de verificación. Revisá tu bandeja de entrada.');
-    } catch (error: any) {
-      console.error('Error al enviar verificación:', error);
-      alert('❌ Error al enviar verificación: ' + error.message);
-    }
+  const user = this.auth.currentUser;
+  if (!user) {
+    alert('No hay un usuario autenticado.');
+    return;
   }
+
+  try {
+    await sendEmailVerification(user);
+
+    this.mostrarAvisoVerificacion = false;
+
+    alert('✅ Se envió un correo de verificación. Revisá tu bandeja de entrada.');
+  } catch (error: any) {
+    console.error('Error al enviar verificación:', error);
+    alert('❌ Error al enviar verificación: ' + error.message);
+  }
+}
 
   async reauthenticateUser(currentPassword: string): Promise<boolean> {
     const user = this.auth.currentUser;
@@ -90,7 +100,6 @@ export class ProfileComponent implements OnInit {
       return false;
     }
   }
-
   
   async guardarCambios() {
     const user = this.auth.currentUser;
@@ -173,15 +182,19 @@ if (this.password) {
     return;
   }
 }
-      const userDocRef = doc(this.firestore, `users/${user.uid}`);
+    const userDocRef = doc(this.firestore, `users/${user.uid}`);
       await updateDoc(userDocRef, {
-        name: this.name || user.displayName || '',
-        email: this.email || user.email || '',
-        photoURL: this.photoURL || user.photoURL || '',
-        updatedAt: new Date(),
-      });
+      name: this.name || user.displayName || '',
+      email: this.email || user.email || '',
+      photoURL: this.photoURL || user.photoURL || '',
+      updatedAt: new Date(),
+    });
 
-      alert('✅ Cambios guardados correctamente.');
+this.mostrarMensajeExito('✅ Los cambios han sido guardados correctamente.');
+
+      setTimeout(() => {
+      this.mensajeExito = '';
+    }, 3000);
     } catch (error: any) {
       console.error('Error al actualizar el perfil:', error);
       alert('❌ Error al actualizar el perfil: ' + error.message);

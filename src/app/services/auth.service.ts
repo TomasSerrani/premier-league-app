@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import {Auth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, updateEmail, updatePassword, deleteUser, sendEmailVerification, User} from '@angular/fire/auth';
-import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, doc, updateDoc, setDoc } from '@angular/fire/firestore';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -17,9 +17,23 @@ export class AuthService {
   });
 }
 
-  register(email: string, password: string) {
-    return createUserWithEmailAndPassword(this.auth, email, password);
-  }
+  async register(email: string, password: string, name: string) {
+  const cred = await createUserWithEmailAndPassword(this.auth, email, password);
+  const user = cred.user;
+
+  await updateProfile(user, {
+    displayName: name
+  });
+
+  await setDoc(doc(this.firestore, `users/${user.uid}`), {
+    name: name,
+    email: email,
+    photoURL: user.photoURL || '',
+    createdAt: new Date()
+  });
+
+  return user;
+}
 
   login(email: string, password: string) {
     return signInWithEmailAndPassword(this.auth, email, password);

@@ -10,12 +10,6 @@
   </div>
 
   <div class="auth-buttons d-flex align-items-center">
-    <button 
-      class="btn btn-outline-light me-2 custom-btn"
-      routerLink="/register"
-    >
-      Registrarse
-    </button>
 
     <ng-container *ngIf="authService.currentUser$ | async as user; else notLoggedIn">
       <button 
@@ -48,13 +42,20 @@
     </ng-container>
 
     <ng-template #notLoggedIn>
-      <button 
-        class="btn btn-light custom-btn-dark"
-        routerLink="/login"
-      >
-        Iniciar sesión
-      </button>
-    </ng-template>
+  <button 
+    class="btn btn-outline-light me-2 custom-btn"
+    routerLink="/register"
+  >
+    Registrarse
+  </button>
+
+  <button 
+    class="btn btn-light custom-btn-dark"
+    routerLink="/login"
+  >
+    Iniciar sesión
+  </button>
+</ng-template>
   </div>
 </div>
 
