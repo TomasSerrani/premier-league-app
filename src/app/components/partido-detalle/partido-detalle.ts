@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient, HttpClientModule } from '@angular/common/http';  
-import { PartidosService } from '../../services/partidos.service';
-import { AuthService } from '../../services/auth.service';
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';  
+import { PartidosService } from '../../services/partidos.service'; // Verifica la ruta
+import { AuthService } from '../../services/auth.service';        // Verifica la ruta
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -16,8 +16,13 @@ import { firstValueFrom } from 'rxjs';
 export class PartidoDetalleComponent implements OnInit {
   teamId!: string;
   matchData: any = null;
-  stats: any = null;
+  stats: any = null; 
   loading = true;
+
+  // 1. CONFIGURACIÓN DEL PROXY (Vital para evitar el error CORS en la web publicada)
+  private proxyUrl = 'https://corsproxy.io/?'; 
+  private baseUrl = 'https://api.football-data.org/v4';
+  private apiKey = 'cacb4dd0adc144999951cbc85164c600'; 
 
   constructor(
     private route: ActivatedRoute,
@@ -39,16 +44,49 @@ export class PartidoDetalleComponent implements OnInit {
   }
 
   getLastMatch() {
-    const apiUrl = `https://v3.football.api-sports.io/fixtures?team=${this.teamId}&league=39&season=2023`;
-    const headers = { 'x-apisports-key': '026e070a9ff0c869152d5a52c93f411d' };
+    // 2. CONSTRUCCIÓN DE LA URL SEGURA
+    const targetUrl = `${this.baseUrl}/teams/${this.teamId}/matches?status=FINISHED&limit=1`;
+    // Envolvemos la URL en el proxy + encoding
+    const url = this.proxyUrl + encodeURIComponent(targetUrl); 
+    
+    const headers = new HttpHeaders({
+      'X-Auth-Token': this.apiKey
+    });
 
-    this.http.get(apiUrl, { headers }).subscribe({
+    this.http.get(url, { headers }).subscribe({
       next: (response: any) => {
-        const fixtures = response.response;
-        if (fixtures.length > 0) {
-          fixtures.sort((a: any, b: any) => new Date(b.fixture.date).getTime() - new Date(a.fixture.date).getTime());
-          this.matchData = fixtures[0];
-          this.getMatchStats(this.matchData.fixture.id);
+        const matches = response.matches;
+        
+        if (matches && matches.length > 0) {
+          // Tomamos el último partido (el más reciente)
+          const ultimoPartido = matches[matches.length - 1]; 
+          
+          // 3. ADAPTADOR: Transformamos los datos para que tu HTML no se rompa
+          this.matchData = {
+            fixture: {
+              id: ultimoPartido.id,
+              date: ultimoPartido.utcDate,
+              venue: { name: "Estadio (No disp. gratis)" }
+            },
+            teams: {
+              home: {
+                name: ultimoPartido.homeTeam.name,
+                logo: ultimoPartido.homeTeam.crest, // crest -> logo
+                winner: ultimoPartido.score.winner === 'HOME_TEAM'
+              },
+              away: {
+                name: ultimoPartido.awayTeam.name,
+                logo: ultimoPartido.awayTeam.crest, // crest -> logo
+                winner: ultimoPartido.score.winner === 'AWAY_TEAM'
+              }
+            },
+            goals: {
+              home: ultimoPartido.score.fullTime.home,
+              away: ultimoPartido.score.fullTime.away
+            }
+          };
+
+          this.loading = false;
         } else {
           this.loading = false;
         }
@@ -60,23 +98,11 @@ export class PartidoDetalleComponent implements OnInit {
     });
   }
 
+  // Las estadísticas requieren pago, dejamos la función vacía para evitar errores 403.
   getMatchStats(fixtureId: number) {
-    const apiUrl = `https://v3.football.api-sports.io/fixtures/statistics?fixture=${fixtureId}`;
-    const headers = { 'x-apisports-key': '026e070a9ff0c869152d5a52c93f411d' };
-
-    this.http.get(apiUrl, { headers }).subscribe({
-      next: (response: any) => {
-        this.zone.run(() => {
-          this.stats = response.response || [];
-          this.loading = false;
-          this.cdr.detectChanges();
-        });
-      },
-      error: (err) => {
-        console.error('Error al obtener estadísticas:', err);
-        this.loading = false;
-      }
-    });
+    console.warn('Las estadísticas detalladas requieren un plan de pago en football-data.org');
+    this.stats = [];
+    this.loading = false;
   }
 
   async guardarEstePartido() {
@@ -93,25 +119,26 @@ export class PartidoDetalleComponent implements OnInit {
     }
 
     const partido = {
-  uid: user.uid,
-  equipoLocal: this.matchData.teams.home.name,
-  equipoVisitante: this.matchData.teams.away.name,
-  logoLocal: this.matchData.teams.home.logo,
-  logoVisitante: this.matchData.teams.away.logo,
-  golesLocal: this.matchData.goals.home,
-  golesVisitante: this.matchData.goals.away,
-  estadio: this.matchData.fixture.venue.name,
-  fecha: this.matchData.fixture.date,
-  idFixture: this.matchData.fixture.id,
-  nota: '',
-  puntaje: null
-};
+      uid: user.uid,
+      equipoLocal: this.matchData.teams.home.name,
+      equipoVisitante: this.matchData.teams.away.name,
+      logoLocal: this.matchData.teams.home.logo,
+      logoVisitante: this.matchData.teams.away.logo,
+      golesLocal: this.matchData.goals.home,
+      golesVisitante: this.matchData.goals.away,
+      estadio: this.matchData.fixture.venue.name,
+      fecha: this.matchData.fixture.date,
+      idFixture: this.matchData.fixture.id,
+      nota: '',
+      puntaje: null
+    };
+
     try {
-  await this.partidosService.guardarPartido(partido);
-  this.router.navigate(['/partidos-guardados']);
-} catch (err) {
-  console.error('Error al guardar partido:', err);
-}
+      await this.partidosService.guardarPartido(partido);
+      this.router.navigate(['/partidos-guardados']);
+    } catch (err) {
+      console.error('Error al guardar partido:', err);
+    }
   }
 
   translations: { [key: string]: string } = {

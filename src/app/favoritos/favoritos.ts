@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FavoritosService } from '../services/favoritos.service';
-import { FootballService } from '../services/football';
+import { FavoritosService } from '../services/favoritos.service'; 
+import { FootballService } from '../services/football'; 
 import { AuthService } from '../services/auth.service';
 import { of, switchMap, forkJoin } from 'rxjs';
 import { FormsModule } from '@angular/forms';
@@ -45,7 +45,11 @@ export class FavoritosComponent implements OnInit {
             this.favoritos = favoritos;
             this.filteredFavoritos = [...favoritos];
             this.updatePagination();
-            this.cargarUltimosPartidos();
+            
+            // Solo cargamos partidos si hay favoritos
+            if (this.favoritos.length > 0) {
+              this.cargarUltimosPartidos();
+            }
           });
         },
         error: (err) => console.error('Error al leer favoritos:', err)
@@ -53,27 +57,32 @@ export class FavoritosComponent implements OnInit {
   }
 
   cargarUltimosPartidos() {
-    if (!this.favoritos.length) return;
+    // Creamos un array de peticiones a la API (una por cada equipo favorito)
     const requests = this.favoritos.map(fav =>
       this.footballService.getUltimosPartidos(fav.equipoId)
     );
 
     forkJoin(requests).subscribe({
       next: (responses: any[]) => {
-        this.favoritos = this.favoritos.map((f, i) => {
-          const resp = responses[i];
-          const partidos = resp?.response || [];
-          const ultimos = partidos
-            .sort((a: any, b: any) =>
-              new Date(b.fixture.date).getTime() - new Date(a.fixture.date).getTime()
-            )
-            .slice(0, 3);
-          return { ...f, ultimosPartidos: ultimos };
-        });
-
         this.zone.run(() => {
+          // Mapeamos los resultados a cada favorito
+          this.favoritos = this.favoritos.map((f, i) => {
+            const resp = responses[i];
+            const partidos = resp?.response || [];
+            
+            // Ordenamos por fecha (más reciente primero) y tomamos 3
+            const ultimos = partidos
+              .sort((a: any, b: any) =>
+                new Date(b.fixture.date).getTime() - new Date(a.fixture.date).getTime()
+              )
+              .slice(0, 3);
+            
+            return { ...f, ultimosPartidos: ultimos };
+          });
+
+          // Actualizamos la vista
           this.filteredFavoritos = [...this.favoritos];
-          this.updatePagination();
+          this.filterFavoritos(); // Re-aplicamos filtro por si el usuario buscaba algo
           this.cdr.detectChanges();
         });
       },
@@ -81,19 +90,40 @@ export class FavoritosComponent implements OnInit {
     });
   }
 
-  getResultado(partido: any, equipoId: number): string {
-    const esLocal = partido.teams.home.id === equipoId;
+  // --- CORRECCIÓN CRÍTICA AQUÍ ---
+  getResultado(partido: any, equipoId: any): string {
+    // Convertimos ambos a String para evitar el error de comparar "66" con 66
+    // equipoId es el ID de tu favorito.
+    // partido.teams.home.id es el ID del equipo local que viene de la API.
+    
+    const idLocal = String(partido.teams?.home?.id);
+    const idFavorito = String(equipoId);
+
+    const esLocal = idLocal === idFavorito;
+    
+    // Obtenemos goles
     const golesFavor = esLocal ? partido.goals.home : partido.goals.away;
     const golesContra = esLocal ? partido.goals.away : partido.goals.home;
+    
+    // Determinamos W (Win), L (Lose), D (Draw)
     if (golesFavor > golesContra) return 'W';
     if (golesFavor < golesContra) return 'L';
     return 'D';
   }
 
+  // --- Lógica de Paginación y Filtros (Sin Cambios) ---
+
   filterFavoritos() {
-    this.filteredFavoritos = this.favoritos.filter(f =>
-      f.nombreEquipo.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
+    const term = this.searchTerm.toLowerCase().trim();
+    
+    if (!term) {
+      this.filteredFavoritos = [...this.favoritos];
+    } else {
+      this.filteredFavoritos = this.favoritos.filter(f =>
+        f.nombreEquipo.toLowerCase().includes(term)
+      );
+    }
+    
     this.currentPage = 1;
     this.updatePagination();
   }
